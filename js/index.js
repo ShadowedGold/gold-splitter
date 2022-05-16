@@ -2,7 +2,7 @@ var party = 6;
 var currencyArr = ["gold", "silver", "copper", "electrum", "platinum"];
 
 currencyArr.forEach(cur => {
-  window[cur] = 0;
+  window[cur] = 0.00;
 });
 
 function splitGold() {
@@ -17,7 +17,9 @@ function splitGold() {
   let dividedSilver = Math.sign(totalGold)*Math.floor(Math.abs(remainingGold*10)/party);
   let remainingSilver = Math.sign(totalGold)*(Math.abs(remainingGold*10)%party);
   let dividedCopper = Math.sign(totalGold)*Math.floor(Math.abs(remainingSilver*10)/party);
-  let remainingCopper = Math.sign(totalGold)*(Math.abs(remainingSilver*10)%party);
+  let remainingCopper = Math.round(Math.sign(totalGold)*(Math.abs(remainingSilver*10)%party));
+
+  console.log(totalGold, remainingGold);
 
   return [dividedGold, dividedSilver, dividedCopper, remainingCopper];
 }
