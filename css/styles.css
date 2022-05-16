@@ -1,6 +1,6 @@
 :root {
   --paddingWidth: 5px;
-  --colourMain: royalblue;
+  --colourMain: dodgerblue;
   --colourTxtMain: white;
   --colourBg: black;
   background: var(--colourBg);
@@ -14,25 +14,31 @@
 .inner {
   position: relative;
   width: 600px;
-  border: var(--colourTxtMain) 2px solid;
   border-radius: calc(var(--paddingWidth)*2);
   display: flex;
-  padding: var(--paddingWidth);
+  background-color: var(--colourMain);
 }
 .currencyHolder, .partyHolder, .inputHolder,
 .label, .field, .results, button {
   display: flex;
   flex: 1;
+  justify-content: center;
 }
 .currencyHolder, .partyHolder {
-  flex-direction: row;
   margin-bottom: var(--paddingWidth);
+  padding: 0 var(--paddingWidth)
 }
 .inputHolder:not(:last-child) {
   margin-right: var(--paddingWidth);
 }
+.currencyHolder {
+  flex-direction: row;
+}
 .inner, .inputHolder, .results {
   flex-direction: column;
+}
+.label {
+  user-select: none;
 }
 .inner, .label, input, .results, button {
   padding: var(--paddingWidth);
@@ -45,9 +51,12 @@
   color: var(--colourTxtMain);
 }
 button {
-  border: none;
+  border: var(--colourTxtMain) 2px solid;
   border-radius: var(--paddingWidth);
   background-color: var(--colourMain);
+  box-sizing: border-box;
+  align-items: center;
+  cursor: pointer;
 }
 input {
   width: 100%;
@@ -56,4 +65,8 @@ input {
   border-radius: var(--paddingWidth);
   background-color: var(--colourTxtMain);
   color: var(--colourBg);
+  text-align: center;
+}
+.results {
+  text-align: center;
 }

@@ -29,7 +29,7 @@ function createInput(inputName, parentEl) {
 
   // label
   let label = document.createElement('div');
-  label.innerHTML = inputName;
+  label.innerHTML = inputName[0].toUpperCase() + inputName.substring(1);
   label.classList.add("label");
   inputHolder.appendChild(label);
 
@@ -40,7 +40,10 @@ function createInput(inputName, parentEl) {
   field.classList.add("field");
   field.id = inputName;
   field.onblur = () => {
-    if (field.value == '') field.value = 0;
+    if (field.value == '') {
+      if (field.id == "party") field.value = 2;
+      else field.value = 0;
+    }
   }
   inputHolder.appendChild(field);
 
@@ -50,7 +53,7 @@ function createInput(inputName, parentEl) {
 function formatResults(dividedCurs) {
   let mainStr = dividedCurs[0]+"g, "+dividedCurs[1]+"s, ";
   return "<span>Each party member gets: "+mainStr+dividedCurs[2]+"c</span>"+
-         ((dividedCurs[3]>0)?"<span>MVP instead gets: "+mainStr+(dividedCurs[2]+dividedCurs[3])+"c</span>":"");
+         ((dividedCurs[3]!=0)?"<span>MVP instead gets: "+mainStr+(dividedCurs[2]+dividedCurs[3])+"c</span>":"");
 }
 
 /* -- major containers ------------------------------------------------ */
@@ -79,7 +82,7 @@ inner.appendChild(partyHolder);
 
 // calcBtn
 let calcBtn = document.createElement('button');
-calcBtn.innerHTML = "calculate";
+calcBtn.innerHTML = "Split";
 calcBtn.classList.add("calcBtn");
 calcBtn.onclick = () => {
   currencyArr.forEach(cur => {
@@ -90,7 +93,9 @@ calcBtn.onclick = () => {
 
   results.innerHTML = formatResults(splitGold());
 }
-inner.appendChild(calcBtn);
+partyHolder.appendChild(calcBtn);
+
+inner.appendChild(partyHolder);
 
 // results
 let results = document.createElement('div');
