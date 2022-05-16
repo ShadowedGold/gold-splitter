@@ -1,0 +1,59 @@
+:root {
+  --paddingWidth: 5px;
+  --colourMain: royalblue;
+  --colourTxtMain: white;
+  --colourBg: black;
+  background: var(--colourBg);
+}
+.outer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+.inner {
+  position: relative;
+  width: 600px;
+  border: var(--colourTxtMain) 2px solid;
+  border-radius: calc(var(--paddingWidth)*2);
+  display: flex;
+  padding: var(--paddingWidth);
+}
+.currencyHolder, .partyHolder, .inputHolder,
+.label, .field, .results, button {
+  display: flex;
+  flex: 1;
+}
+.currencyHolder, .partyHolder {
+  flex-direction: row;
+  margin-bottom: var(--paddingWidth);
+}
+.inputHolder:not(:last-child) {
+  margin-right: var(--paddingWidth);
+}
+.inner, .inputHolder, .results {
+  flex-direction: column;
+}
+.inner, .label, input, .results, button {
+  padding: var(--paddingWidth);
+}
+.inner, input, button {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: calc(var(--paddingWidth)*3);
+}
+.inner, button {
+  color: var(--colourTxtMain);
+}
+button {
+  border: none;
+  border-radius: var(--paddingWidth);
+  background-color: var(--colourMain);
+}
+input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--paddingWidth);
+  background-color: var(--colourTxtMain);
+  color: var(--colourBg);
+}
