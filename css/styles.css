@@ -1,5 +1,15 @@
+@media (max-aspect-ratio: 1/1) {
+  :root {
+    --windowWidth: 100vw;
+  }
+}
+@media (min-aspect-ratio: 1/1) {
+  :root {
+    --windowWidth: 550px;
+  }
+}
 :root {
-  --paddingWidth: 5px;
+  --paddingWidth: calc(var(--windowWidth)/110);
   --colourMain: dodgerblue;
   --colourTxtMain: white;
   --colourBg: black;
@@ -13,7 +23,7 @@
 }
 .inner {
   position: relative;
-  width: 600px;
+  width: var(--windowWidth);
   border-radius: calc(var(--paddingWidth)*2);
   display: flex;
   background-color: var(--colourMain);
@@ -51,7 +61,7 @@
   color: var(--colourTxtMain);
 }
 button {
-  border: var(--colourTxtMain) 2px solid;
+  border: var(--colourTxtMain) calc(var(--paddingWidth)/5*2) solid;
   border-radius: var(--paddingWidth);
   background-color: var(--colourMain);
   box-sizing: border-box;
