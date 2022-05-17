@@ -9,17 +9,23 @@
   }
 }
 :root {
-  --paddingWidth: calc(var(--windowWidth)/110);
+  --paddingWidth: calc(var(--windowWidth)/100);
   --colourMain: dodgerblue;
   --colourTxtMain: white;
   --colourBg: black;
   background: var(--colourBg);
 }
+body {
+  padding: 0;
+  margin: 0;
+}
 .outer {
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+  height: 100%;
+  padding: calc(var(--paddingWidth)*3);
+  box-sizing: border-box;
   justify-content: center;
+  margin-top: 33vh;
 }
 .inner {
   position: relative;
@@ -47,18 +53,21 @@
 .inner, .inputHolder, .results {
   flex-direction: column;
 }
-.label {
-  user-select: none;
+.label, .result {
+  font-size: calc(var(--paddingWidth)*3);
 }
 .inner, .label, input, .results, button {
   padding: var(--paddingWidth);
 }
-.inner, input, button {
+.inner, input, button, .result span {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: calc(var(--paddingWidth)*3);
+  font-size: calc(var(--paddingWidth)*4);
 }
 .inner, button {
   color: var(--colourTxtMain);
+}
+.label {
+  user-select: none;
 }
 button {
   border: var(--colourTxtMain) calc(var(--paddingWidth)/5*2) solid;

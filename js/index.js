@@ -6,20 +6,22 @@ currencyArr.forEach(cur => {
 });
 
 function splitGold() {
-  let totalGold = gold +
-                  (silver/10) +
-                  (copper/100) +
-                  (electrum/2) +
-                  (platinum*10);
-  
-  let dividedGold = Math.sign(totalGold)*Math.floor(Math.abs(totalGold)/party);
-  let remainingGold = Math.sign(totalGold)*(Math.abs(totalGold)%party);
-  let dividedSilver = Math.sign(totalGold)*Math.floor(Math.abs(remainingGold*10)/party);
-  let remainingSilver = Math.sign(totalGold)*(Math.abs(remainingGold*10)%party);
-  let dividedCopper = Math.sign(totalGold)*Math.floor(Math.abs(remainingSilver*10)/party);
-  let remainingCopper = Math.round(Math.sign(totalGold)*(Math.abs(remainingSilver*10)%party));
+  let totalCopper = (gold*100) +
+                    (silver*10) +
+                    copper +
+                    (electrum*50) +
+                    (platinum*1000);
 
-  return [dividedGold, dividedSilver, dividedCopper, remainingCopper];
+  let dividedPlatinum = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/1000)/party);
+  totalCopper -= dividedPlatinum*party*1000;
+  let dividedGold = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/100)/party);
+  totalCopper -= dividedGold*party*100;
+  let dividedSilver = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/10)/party);
+  totalCopper -= dividedSilver*party*10;
+  let dividedCopper = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper)/party);
+  totalCopper -= dividedCopper*party;
+
+  return [dividedPlatinum, dividedGold, dividedSilver, dividedCopper, totalCopper];
 }
 
 function createInput(inputName, parentEl) {
@@ -51,9 +53,34 @@ function createInput(inputName, parentEl) {
 }
 
 function formatResults(dividedCurs) {
-  let mainStr = dividedCurs[0]+"g, "+dividedCurs[1]+"s, ";
-  return "<span>Each party member gets: "+mainStr+dividedCurs[2]+"c</span>"+
-         ((dividedCurs[3]!=0)?"<span>MVP instead gets: "+mainStr+(dividedCurs[2]+dividedCurs[3])+"c</span>":"");
+  let mainStr = "";
+  let curArr = ["pp", "gp", "sp"];
+
+  curArr.forEach((curInital, i) => {
+    if (dividedCurs[i] != 0) {
+      if (mainStr.slice(-1) == "p") mainStr += " , ";
+      mainStr += "<span>"+dividedCurs[i]+"</span>"+curInital;
+    }
+  });
+
+  let mvpStr = mainStr;
+  if (dividedCurs[4] != 0) {
+    if (mainStr.slice(-1) == "p") mvpStr += " , ";
+    mvpStr += "<span>"+(dividedCurs[3]+dividedCurs[4])+"</span>cp";
+  }
+
+  if (dividedCurs[3] != 0) {
+    if (mainStr.slice(-1) == "p") mainStr += " , ";
+    mainStr += "<span>"+dividedCurs[3]+"</span>cp";
+  }
+
+  return "<span class=\"label\">Each party member gets</span>"+
+         "<span class=\"result\">"+mainStr+"</span>"+
+         ((dividedCurs[4]!=0)?
+         "<br>"+
+         "<span class=\"label\">MVP instead gets</span>"+
+         "<span class=\"result\">"+mvpStr+"</span>":
+         "");
 }
 
 /* -- major containers ------------------------------------------------ */
@@ -78,7 +105,10 @@ inner.appendChild(currencyHolder);
 let partyHolder = document.createElement('div');
 partyHolder.classList.add("partyHolder");
 createInput("party", partyHolder);
-inner.appendChild(partyHolder);
+
+// inputHolder
+let inputHolder = document.createElement('div');
+inputHolder.classList.add("inputHolder");
 
 // calcBtn
 let calcBtn = document.createElement('button');
@@ -93,8 +123,9 @@ calcBtn.onclick = () => {
 
   results.innerHTML = formatResults(splitGold());
 }
-partyHolder.appendChild(calcBtn);
+inputHolder.appendChild(calcBtn);
 
+partyHolder.appendChild(inputHolder);
 inner.appendChild(partyHolder);
 
 // results
