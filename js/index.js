@@ -1,5 +1,6 @@
 var party = 6;
 var currencyArr = ["gold", "silver", "copper", "electrum", "platinum"];
+var cbArr = ["pP", "gP", "sP", "cP"];
 
 currencyArr.forEach(cur => {
   window[cur] = 0;
@@ -12,74 +13,105 @@ function splitGold() {
                     (electrum*50) +
                     (platinum*1000);
 
-  let dividedPlatinum = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/1000)/party);
-  totalCopper -= dividedPlatinum*party*1000;
-  let dividedGold = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/100)/party);
-  totalCopper -= dividedGold*party*100;
-  let dividedSilver = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper/10)/party);
-  totalCopper -= dividedSilver*party*10;
   let dividedCopper = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper)/party);
-  totalCopper -= dividedCopper*party;
+  let mvpCopper = dividedCopper + Math.sign(totalCopper)*(Math.abs(totalCopper)%party);
 
-  return [dividedPlatinum, dividedGold, dividedSilver, dividedCopper, totalCopper];
+  return [dividedCopper, mvpCopper];
 }
 
-function createInput(inputName, parentEl) {
+function createLabel(name, parentEl) {
+  let label = document.createElement('div');
+  label.innerHTML = name[0].toUpperCase() + name.substring(1);
+  label.classList.add("label");
+  parentEl.appendChild(label);
+}
+
+function createInput(inputName, parentEl, type) {
   // inputHolder
   let inputHolder = document.createElement('div');
   inputHolder.classList.add("inputHolder");
 
-  // label
-  let label = document.createElement('div');
-  label.innerHTML = inputName[0].toUpperCase() + inputName.substring(1);
-  label.classList.add("label");
-  inputHolder.appendChild(label);
+  switch (type) {
+    case "field":
+      // label
+      createLabel(inputName, inputHolder);
 
-  // field
-  let field = document.createElement('INPUT');
-  field.defaultValue = window[inputName];
-  field.type = "number";
-  field.classList.add("field");
-  field.id = inputName;
-  field.onblur = () => {
-    if (field.value == '') {
-      if (field.id == "party") field.value = 2;
-      else field.value = 0;
-    }
+      // field
+      let field = document.createElement('INPUT');
+      field.defaultValue = window[inputName];
+      field.type = "number";
+      field.classList.add("field");
+      field.id = inputName;
+      field.onblur = () => {
+        if (field.value == '') {
+          if (field.id == "party") field.value = 2;
+          else field.value = 0;
+        }
+      }
+      inputHolder.appendChild(field);
+      break;
+    case "button":
+      // calcBtn
+      let calcBtn = document.createElement('button');
+      calcBtn.innerHTML = inputName;
+      calcBtn.classList.add("calcBtn");
+      calcBtn.onclick = () => {
+        currencyArr.forEach(cur => {
+          window[cur] = parseFloat(document.getElementById(cur).value);
+        });
+
+        party = parseInt(document.getElementById("party").value);
+
+        results.innerHTML = formatResults(splitGold());
+      }
+      inputHolder.appendChild(calcBtn);
+      break;
+    case "cb":
+      // label
+      createLabel(inputName, inputHolder);
+
+      // cb
+      let cb = document.createElement('INPUT');
+      cb.type = "checkbox";
+      cb.checked = true;
+      cb.classList.add("cb");
+      cb.id = inputName;
+      inputHolder.appendChild(cb);
+      break;
   }
-  inputHolder.appendChild(field);
-
+  
   parentEl.appendChild(inputHolder);
 }
 
 function formatResults(dividedCurs) {
-  let mainStr = "";
-  let curArr = ["pp", "gp", "sp"];
-
-  curArr.forEach((curInital, i) => {
-    if (dividedCurs[i] != 0) {
-      if (mainStr.slice(-1) == "p") mainStr += " , ";
-      mainStr += "<span>"+dividedCurs[i]+"</span>"+curInital;
-    }
-  });
-
-  let mvpStr = mainStr;
-  if (dividedCurs[4] != 0) {
-    if (mainStr.slice(-1) == "p") mvpStr += " , ";
-    mvpStr += "<span>"+(dividedCurs[3]+dividedCurs[4])+"</span>cp";
+  let curArr = ["pp", "gp", "sp", "cp"];
+  
+  function splitNumIntoArray(amount) {
+    return String(Math.abs(amount)).split(/(\d*(?=\d{3}))?(\d?(?=\d{2}))?(\d?(?=\d{1}))?(\d?$)?/).filter(Boolean).map((num)=>{
+      return Math.sign(amount)*Number(num);
+    });
   }
 
-  if (dividedCurs[3] != 0) {
-    if (mainStr.slice(-1) == "p") mainStr += " , ";
-    mainStr += "<span>"+dividedCurs[3]+"</span>cp";
+  function getResultStr(copperArr) {
+    let str = "";
+
+    copperArr.forEach((digit, i) => {
+      if (digit != 0) {
+        if (str.slice(-1) == "p") str += " , ";
+        let start = curArr.length - copperArr.length;
+        str += "<span>"+digit+"</span>"+curArr[start+i];
+      }
+    });
+
+    return str;
   }
 
   return "<span class=\"label\">Each party member gets</span>"+
-         "<span class=\"result\">"+mainStr+"</span>"+
-         ((dividedCurs[4]!=0)?
+         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[0]))+"</span>"+
+         ((dividedCurs[0] != dividedCurs[1])?
          "<br>"+
          "<span class=\"label\">MVP instead gets</span>"+
-         "<span class=\"result\">"+mvpStr+"</span>":
+         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[1]))+"</span>":
          "");
 }
 
@@ -97,35 +129,25 @@ inner.classList.add("inner");
 let currencyHolder = document.createElement('div');
 currencyHolder.classList.add("currencyHolder");
 currencyArr.forEach(currency => {
-  createInput(currency, currencyHolder);
+  createInput(currency, currencyHolder, "field");
 });
 inner.appendChild(currencyHolder);
 
 // partyHolder
 let partyHolder = document.createElement('div');
 partyHolder.classList.add("partyHolder");
-createInput("party", partyHolder);
+createInput("party", partyHolder, "field");
 
-// inputHolder
-let inputHolder = document.createElement('div');
-inputHolder.classList.add("inputHolder");
+/*
+let cbHolder = document.createElement('div');
+cbHolder.classList.add("cbHolder");
+cbArr.forEach(cb => {
+  createInput(cb, cbHolder, "cb");
+});
+partyHolder.appendChild(cbHolder);
+*/
 
-// calcBtn
-let calcBtn = document.createElement('button');
-calcBtn.innerHTML = "Split";
-calcBtn.classList.add("calcBtn");
-calcBtn.onclick = () => {
-  currencyArr.forEach(cur => {
-    window[cur] = parseFloat(document.getElementById(cur).value);
-  });
-
-  party = parseInt(document.getElementById("party").value);
-
-  results.innerHTML = formatResults(splitGold());
-}
-inputHolder.appendChild(calcBtn);
-
-partyHolder.appendChild(inputHolder);
+createInput("Split", partyHolder, "button");
 inner.appendChild(partyHolder);
 
 // results
