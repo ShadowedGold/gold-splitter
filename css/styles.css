@@ -61,14 +61,17 @@ body {
 .inputHolder:not(:last-child), .cbHolder {
   margin-right: var(--paddingWidth);
 }
-.currencyHolder {
+.partyHolder>:not(:first-child) {
+  flex: 2 1 var(--paddingWidth);
+}
+.currencyHolder, .cbHolder {
   flex-direction: row;
 }
 .inner, .inputHolder, .results {
   flex-direction: column;
 }
 .label, .result {
-  font-size: calc(var(--paddingWidth) * (calc(var(--multiplier)/4*3)));
+  font-size: calc(var(--paddingWidth) * 3);
 }
 .inner, .label, input, .results, button {
   padding: var(--paddingWidth);
@@ -104,12 +107,9 @@ input {
   text-align: center;
 }
 .cbHolder {
-  flex-wrap: wrap;
-  flex: 3;
   justify-content: space-between;
 }
-.cbHolder:before, .cbHolder:after
-{
+.cbHolder:before, .cbHolder:after {
   content:'';
   display:block;
   width:0;
@@ -120,6 +120,7 @@ input {
   align-items: center;
   margin: 0;
   flex: 0;
+  box-sizing: border-box;
 }
 input[type="checkbox"] {
   border: none;
@@ -131,7 +132,6 @@ input[type="checkbox"] {
   align-items: center;
   height: var(--inputHeight);
   aspect-ratio: 1/1;
-  
 }
 button, input[type="checkbox"]:checked {
   background-color: var(--colourMainD);
@@ -142,8 +142,8 @@ button:hover, input[type="checkbox"]:checked:hover {
 input[type="checkbox"]:after {
   font-family: "Noto Emoji";
   color: var(--colourTxtMain);
-  content: "⭐";
-  font-size: calc(var(--paddingWidth)*4);
+  content: "💰";
+  font-size: calc(var(--paddingWidth) * var(--multiplier));
 }
 .results {
   text-align: center;

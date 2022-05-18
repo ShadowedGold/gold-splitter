@@ -1,9 +1,13 @@
 var party = 6;
 var currencyArr = ["gold", "silver", "copper", "electrum", "platinum"];
-var cbArr = ["pP", "gP", "sP", "cP"];
+var cbArr = ["platinum", "gold", "silver", "copper"];
 
 currencyArr.forEach(cur => {
   window[cur] = 0;
+});
+
+cbArr.forEach((cb, i) => {
+  cbArr[i] = {name: cb, checked: true, shorthand: cb[0]+"p"};
 });
 
 function splitGold() {
@@ -13,15 +17,24 @@ function splitGold() {
                     (electrum*50) +
                     (platinum*1000);
 
-  let dividedCopper = Math.sign(totalCopper)*Math.floor(Math.abs(totalCopper)/party);
-  let mvpCopper = dividedCopper + Math.sign(totalCopper)*(Math.abs(totalCopper)%party);
+  let factor = 1;
+  [...cbArr].reverse().some((cb, i) => {
+    if (!cb.checked) {
+      factor = Math.pow(10, i+1);
+      return false;
+    }
+    return true;
+  });
+
+  let dividedCopper = Math.sign(totalCopper)*(Math.floor(Math.abs(totalCopper)/(party*factor))*factor);
+  let mvpCopper = dividedCopper + Math.sign(totalCopper)*(Math.abs(totalCopper)%(party*factor));
 
   return [dividedCopper, mvpCopper];
 }
 
-function createLabel(name, parentEl) {
+function createLabel(name, parentEl, type) {
   let label = document.createElement('div');
-  label.innerHTML = name[0].toUpperCase() + name.substring(1);
+  label.innerHTML = (type != "cb") ? name[0].toUpperCase() + name.substring(1) : name.toUpperCase();
   label.classList.add("label");
   parentEl.appendChild(label);
 }
@@ -60,6 +73,10 @@ function createInput(inputName, parentEl, type) {
           window[cur] = parseFloat(document.getElementById(cur).value);
         });
 
+        cbArr.forEach((cb, i) => {
+          cbArr[i].checked = document.getElementById(cbArr[i].shorthand).checked;
+        });
+
         party = parseInt(document.getElementById("party").value);
 
         results.innerHTML = formatResults(splitGold());
@@ -68,7 +85,7 @@ function createInput(inputName, parentEl, type) {
       break;
     case "cb":
       // label
-      createLabel(inputName, inputHolder);
+      createLabel(inputName, inputHolder, "cb");
 
       // cb
       let cb = document.createElement('INPUT');
@@ -84,22 +101,31 @@ function createInput(inputName, parentEl, type) {
 }
 
 function formatResults(dividedCurs) {
-  let curArr = ["pp", "gp", "sp", "cp"];
-  
   function splitNumIntoArray(amount) {
     return String(Math.abs(amount)).split(/(\d*(?=\d{3}))?(\d?(?=\d{2}))?(\d?(?=\d{1}))?(\d?$)?/).filter(Boolean).map((num)=>{
       return Math.sign(amount)*Number(num);
     });
   }
 
-  function getResultStr(copperArr) {
+  function checkedEarlier(present) {
+    return cbArr.some((cb, i) => {
+      if (present > i && cb.checked) return true;
+      else return false;
+    });
+  }
+
+  function getResultStr(copperArr, override) {
     let str = "";
+    let holding = 0;
 
     copperArr.forEach((digit, i) => {
-      if (digit != 0) {
-        if (str.slice(-1) == "p") str += " , ";
-        let start = curArr.length - copperArr.length;
-        str += "<span>"+digit+"</span>"+curArr[start+i];
+      if (digit != 0 || holding != 0) {
+        let cbIndex = cbArr.length - copperArr.length + i;
+        if (cbArr[cbIndex].checked || (override && checkedEarlier(cbIndex)) || (cbIndex == cbArr.length-1)) {
+          if (str.slice(-1) == "p") str += " , ";
+          str += "<span>"+(digit+holding)+"</span>"+cbArr[cbIndex].shorthand;
+          holding = 0;
+        } else holding = (holding+digit)*10;
       }
     });
 
@@ -111,7 +137,7 @@ function formatResults(dividedCurs) {
          ((dividedCurs[0] != dividedCurs[1])?
          "<br>"+
          "<span class=\"label\">MVP instead gets</span>"+
-         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[1]))+"</span>":
+         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[1]), true)+"</span>":
          "");
 }
 
@@ -138,14 +164,12 @@ let partyHolder = document.createElement('div');
 partyHolder.classList.add("partyHolder");
 createInput("party", partyHolder, "field");
 
-/*
 let cbHolder = document.createElement('div');
 cbHolder.classList.add("cbHolder");
 cbArr.forEach(cb => {
-  createInput(cb, cbHolder, "cb");
+  createInput(cb.shorthand, cbHolder, "cb");
 });
 partyHolder.appendChild(cbHolder);
-*/
 
 createInput("Split", partyHolder, "button");
 inner.appendChild(partyHolder);
