@@ -107,11 +107,18 @@ function formatResults(dividedCurs) {
     });
   }
 
-  function checkedEarlier(present) {
-    return cbArr.some((cb, i) => {
+  function otherChecked(present) {
+    let bigger = cbArr.some((cb, i) => {
       if (present > i && cb.checked) return true;
       else return false;
     });
+
+    let smaller = cbArr.some((cb, i) => {
+      if (present < i && cb.checked) return true;
+      else return false;
+    });
+
+    if (!smaller && bigger) return true;
   }
 
   function getResultStr(copperArr, override) {
@@ -121,7 +128,7 @@ function formatResults(dividedCurs) {
     copperArr.forEach((digit, i) => {
       if (digit != 0 || holding != 0) {
         let cbIndex = cbArr.length - copperArr.length + i;
-        if (cbArr[cbIndex].checked || (override && checkedEarlier(cbIndex)) || (cbIndex == cbArr.length-1)) {
+        if (cbArr[cbIndex].checked || (override && otherChecked(cbIndex)) || (cbIndex == cbArr.length-1)) {
           if (str.slice(-1) == "p") str += " , ";
           str += "<span>"+(digit+holding)+"</span>"+cbArr[cbIndex].shorthand;
           holding = 0;
