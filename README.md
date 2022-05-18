@@ -4,7 +4,7 @@ A gold splitting calculator for D&amp;D
 https://shadowedgold.github.io/gold-splitter/
 
 **What doesn't it handle yet?**
-if you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field)
+If you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field)
 
 **How do check boxes behave?**
 It will try to give back the party rewards in the currencies you have checked. Spare change goes to the MVP in the most optimal format.
