@@ -3,11 +3,12 @@ A gold splitting calculator for D&amp;D
 
 https://shadowedgold.github.io/gold-splitter/
 
-**What doesn't it handle yet?**
+### What doesn't it handle yet?
 
 If you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field)
 
-**How do check boxes behave?**
+
+### How do check boxes behave?
 
 It will try to give back the party rewards in the currencies you have checked. Spare change goes to the MVP in the most optimal format.
 
@@ -17,7 +18,8 @@ If you check GP and CP, but not SP, that means we won't divide in SP for the mai
 
 If you uncheck all the boxes, everything is considered unwanted small change, and the MVP gets everything in CP.
 
-**How does coins weight work?**
+
+### How does coins weight work?
 
 As per D&D's Basic Rules: Chapter 5, Wealth, Coinage...
 "A standard coin weighs about a third of an ounce, so fifty coins weigh a pound."
