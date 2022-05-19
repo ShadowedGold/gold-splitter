@@ -21,7 +21,7 @@ If you uncheck all the boxes, everything is considered unwanted small change, an
 
 ### How does coin weight work?
 
-As per D&D's Basic Rules: Chapter 5, Wealth, Coinage...
+As per D&D's Basic Rules: Chapter 5, Wealth, Coinage...  
 "A standard coin weighs about a third of an ounce, so fifty coins weigh a pound."
 
 D&D Beyond also seems to use this measurement; each coin weights 0.02 lb.
