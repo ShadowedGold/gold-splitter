@@ -16,3 +16,10 @@ Eg; say you have 5055 copper, and you check PP and GP. This means the party want
 If you check GP and CP, but not SP, that means we won't divide in SP for the main party or the MVP. All change will be handed out in GP or CP.
 
 If you uncheck all the boxes, everything is considered unwanted small change, and the MVP gets everything in CP.
+
+**How does coins weight work?**
+
+As per D&D's Basic Rules: Chapter 5, Wealth, Coinage...
+"A standard coin weighs about a third of an ounce, so fifty coins weigh a pound."
+
+D&D Beyond also seems to use this measurement; each coin weights 0.02 lb.
