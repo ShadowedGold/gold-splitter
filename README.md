@@ -8,7 +8,7 @@ https://shadowedgold.github.io/gold-splitter/
 If you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field)
 
 
-### How do check boxes behave?
+### How do checkboxes behave?
 
 It will try to give back the party rewards in the currencies you have checked. Spare change goes to the MVP in the most optimal format.
 
