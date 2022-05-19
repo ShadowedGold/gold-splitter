@@ -124,17 +124,21 @@ function formatResults(dividedCurs) {
   function getResultStr(copperArr, override) {
     let str = "";
     let holding = 0;
+    let coinCount = 0;
 
     copperArr.forEach((digit, i) => {
       if (digit != 0 || holding != 0) {
         let cbIndex = cbArr.length - copperArr.length + i;
         if (cbArr[cbIndex].checked || (override && otherChecked(cbIndex)) || (cbIndex == cbArr.length-1)) {
           if (str.slice(-1) == "p") str += " , ";
+          coinCount += (digit+holding);
           str += "<span>"+(digit+holding)+"</span>"+cbArr[cbIndex].shorthand;
           holding = 0;
         } else holding = (holding+digit)*10;
       }
     });
+
+    if (coinCount != 0) str += "</span><span class=\"label\">Weight: "+(coinCount*0.02).toFixed(2)+" lb";
 
     return str;
   }
