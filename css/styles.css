@@ -142,7 +142,7 @@ button:hover, input[type="checkbox"]:checked:hover {
 input[type="checkbox"]:after {
   font-family: "Noto Emoji";
   color: var(--colourTxtMain);
-  content: "💰";
+  content: "✔";
   font-size: calc(var(--paddingWidth) * var(--multiplier));
 }
 .results {
