@@ -19,7 +19,7 @@ If you check GP and CP, but not SP, that means we won't divide in SP for the mai
 If you uncheck all the boxes, everything is considered unwanted small change, and the MVP gets everything in CP.
 
 
-### How does coins weight work?
+### How does coin weight work?
 
 As per D&D's Basic Rules: Chapter 5, Wealth, Coinage...
 "A standard coin weighs about a third of an ounce, so fifty coins weigh a pound."
