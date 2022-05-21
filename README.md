@@ -7,7 +7,7 @@ https://shadowedgold.github.io/gold-splitter/
 
 If you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field).
 
-### What's the difference between splitting in the dungeon or in town?
+### What's the difference between splitting in the town and dungeon?
 
 If you split in town, you can do coin conversion (break or fuse denominations up and down).
 
