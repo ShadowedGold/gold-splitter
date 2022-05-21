@@ -48,7 +48,7 @@ body {
   display: flex;
   background-color: var(--colourMain);
 }
-.currencyHolder, .partyHolder, .cbHolder, .inputHolder,
+.currencyHolder, .partyHolder, .cbHolder, .btnHolder, .inputHolder,
 .label, .field, .results, button {
   display: flex;
   flex: 1;
@@ -64,19 +64,19 @@ body {
 .partyHolder>:not(:first-child) {
   flex: 2 1 var(--paddingWidth);
 }
-.currencyHolder, .cbHolder {
+.currencyHolder, .cbHolder, .btnHolder {
   flex-direction: row;
 }
 .inner, .inputHolder, .results {
   flex-direction: column;
 }
-.label, .result {
+.label, .result, button {
   font-size: calc(var(--paddingWidth) * 3);
 }
 .inner, .label, input, .results, button {
   padding: var(--paddingWidth);
 }
-.inner, input, button, .result span {
+.inner, input, .result span {
   font-family: Arial, Helvetica, sans-serif;
   font-size: calc(var(--paddingWidth) * var(--multiplier));
 }

@@ -7,10 +7,21 @@ https://shadowedgold.github.io/gold-splitter/
 
 If you put in less than a copper worth of stuff (eg 0.1 in the copper field, or 0.01 in the silver field).
 
+### What's the difference between splitting in the dungeon or in town?
+
+If you split in town, you can do coin conversion (break or fuse denominations up and down).
+
+If you split in the dungeon, we're just going to divide up the physical coins into piles. The dungeon bag takes all coins that couldn't be evenly divided.
+
+The party would then divide the dungeon bag coins in town if they wanted to evenly split them amongst the party.
 
 ### How do checkboxes behave?
 
-It will try to give back the party rewards in the currencies you have checked. Spare change goes to the MVP in the most optimal format.
+Ignored if you are splitting in the dungeon.
+
+If you are splitting in town...
+
+We will try to give back the party rewards in the currencies you have checked. Spare change goes to the MVP in the most optimal format.
 
 Eg; say you have 5055 copper, and you check PP and GP. This means the party wants everything divided to the nearest GP. That's 50gp / 6 = 8gp each (48 total). Then the MVP gets everything left over on top of that in the most optimal format (+extra 2gp 5sp 5cp, for 1pp 5sp 5cp total).
 

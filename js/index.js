@@ -32,6 +32,28 @@ function splitGold() {
   return [dividedCopper, mvpCopper];
 }
 
+function dungeonSplitter() {
+  let pileContents = [];
+  let bagContents = [];
+
+  currencyArr.forEach(currency => {
+    if (window[currency] != 0) {
+      let amount = window[currency];
+      let sh = currency[0]+"p";
+
+      // equal piles
+      if ((Math.floor(Math.abs(amount)/party)) != 0)
+      pileContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.floor(Math.abs(amount)/party))});
+      
+      // into the bag
+      if ((Math.abs(amount)%party) != 0)
+      bagContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.abs(amount)%party)});
+    }
+  });
+
+  return [pileContents, bagContents];
+}
+
 function createLabel(name, parentEl, type) {
   let label = document.createElement('div');
   label.innerHTML = (type != "cb") ? name[0].toUpperCase() + name.substring(1) : name.toUpperCase();
@@ -64,24 +86,20 @@ function createInput(inputName, parentEl, type) {
       inputHolder.appendChild(field);
       break;
     case "button":
-      // calcBtn
-      let calcBtn = document.createElement('button');
-      calcBtn.innerHTML = inputName;
-      calcBtn.classList.add("calcBtn");
-      calcBtn.onclick = () => {
+      // btn
+      let btn = document.createElement('button');
+      btn.innerText = "Split in\n"+inputName;
+      btn.classList.add("btn");
+      btn.onclick = () => {
         currencyArr.forEach(cur => {
           window[cur] = parseFloat(document.getElementById(cur).value);
         });
 
-        cbArr.forEach((cb, i) => {
-          cbArr[i].checked = document.getElementById(cbArr[i].shorthand).checked;
-        });
-
         party = parseInt(document.getElementById("party").value);
 
-        results.innerHTML = formatResults(splitGold());
+        results.innerHTML = window["splitIn"+inputName]();
       }
-      inputHolder.appendChild(calcBtn);
+      inputHolder.appendChild(btn);
       break;
     case "cb":
       // label
@@ -152,6 +170,46 @@ function formatResults(dividedCurs) {
          "");
 }
 
+function formatDungeonResults(piles) {
+  let pileStr = "";
+  let bagStr = "";
+
+  function getResultStr(pile) {
+    let str = "";
+    let coinCount = 0;
+
+    pile.forEach((currency, i) => {
+      if (str.slice(-1) == "p") str += " , ";
+      coinCount += pile[i].amount;
+      str += "<span>"+pile[i].amount+"</span>"+pile[i].shorthand;
+    });
+
+    if (coinCount != 0) str += "</span><span class=\"label\">Weight: "+(coinCount*0.02).toFixed(2)+" lb";
+
+    return str;
+  }
+
+  return "<span class=\"label\">Each party member gets</span>"+
+         "<span class=\"result\">"+getResultStr(piles[0])+"</span>"+
+         ((piles[1].length >= 1)?
+         "<br>"+
+         "<span class=\"label\">The dungeon bag gets</span>"+
+         "<span class=\"result\">"+getResultStr(piles[1])+"</span>":
+         "");
+}
+
+function splitInTown() {
+  cbArr.forEach((cb, i) => {
+    cbArr[i].checked = document.getElementById(cbArr[i].shorthand).checked;
+  });
+
+  return formatResults(splitGold());
+}
+
+function splitInDungeon() {
+  return formatDungeonResults(dungeonSplitter());
+}
+
 /* -- major containers ------------------------------------------------ */
 
 // outer
@@ -182,7 +240,13 @@ cbArr.forEach(cb => {
 });
 partyHolder.appendChild(cbHolder);
 
-createInput("Split", partyHolder, "button");
+// btnHolder
+let btnHolder = document.createElement('div');
+btnHolder.classList.add("btnHolder");
+createInput("Town",btnHolder, "button");
+createInput("Dungeon", btnHolder, "button");
+partyHolder.appendChild(btnHolder);
+
 inner.appendChild(partyHolder);
 
 // results
