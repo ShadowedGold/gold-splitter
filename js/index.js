@@ -236,6 +236,7 @@ let partyHolder = document.createElement('div');
 partyHolder.classList.add("partyHolder");
 createInput("party", partyHolder, "field");
 
+// cbHolder
 let cbHolder = document.createElement('div');
 cbHolder.classList.add("cbHolder");
 cbArr.forEach(cb => {
