@@ -246,7 +246,7 @@ partyHolder.appendChild(cbHolder);
 // btnHolder
 let btnHolder = document.createElement('div');
 btnHolder.classList.add("btnHolder");
-createInput("Town",btnHolder, "button");
+createInput("Town", btnHolder, "button");
 createInput("Dungeon", btnHolder, "button");
 partyHolder.appendChild(btnHolder);
 
