@@ -161,13 +161,16 @@ function formatResults(dividedCurs) {
     return str;
   }
 
-  return "<span class=\"label\">Each party member gets</span>"+
-         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[0]))+"</span>"+
-         ((dividedCurs[0] != dividedCurs[1])?
-         "<br>"+
-         "<span class=\"label\">MVP instead gets</span>"+
-         "<span class=\"result\">"+getResultStr(splitNumIntoArray(dividedCurs[1]), true)+"</span>":
-         "");
+  return  "<div class=\"result\">"+
+            "<span class=\"label\">Each party member gets</span>"+
+            "<span class=\"amount\">"+getResultStr(splitNumIntoArray(dividedCurs[0]))+"</span>"+
+          "</div>"+
+          ((dividedCurs[0] != dividedCurs[1])?
+          "<div class=\"result\">"+
+            "<span class=\"label\">MVP instead gets</span>"+
+            "<span class=\"amount\">"+getResultStr(splitNumIntoArray(dividedCurs[1]), true)+"</span>"+
+          "</div>":
+          "");
 }
 
 function formatDungeonResults(piles) {
@@ -189,13 +192,17 @@ function formatDungeonResults(piles) {
     return str;
   }
 
-  return "<span class=\"label\">Each party member gets</span>"+
-         "<span class=\"result\">"+getResultStr(piles[0])+"</span>"+
-         ((piles[1].length >= 1)?
-         "<br>"+
-         "<span class=\"label\">The dungeon bag gets</span>"+
-         "<span class=\"result\">"+getResultStr(piles[1])+"</span>":
-         "");
+  return  "<div class=\"result\">"+
+            "<span class=\"label\">Each party member gets</span>"+
+            "<span class=\"amount\">"+getResultStr(piles[0])+"</span>"+
+          "</div>"+
+          ((piles[1].length >= 1)?
+          "<div class=\"result\">"+
+            "<span class=\"label\">The dungeon bag gets</span>"+
+            "<span class=\"amount\">"+getResultStr(piles[1])+"</span>"+
+          "</div>":
+          "");
+
 }
 
 function splitInTown() {
