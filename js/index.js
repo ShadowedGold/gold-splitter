@@ -10,50 +10,6 @@ cbArr.forEach((cb, i) => {
   cbArr[i] = {name: cb, checked: true, shorthand: cb[0]+"p"};
 });
 
-function splitGold() {
-  let totalCopper = (gold*100) +
-                    (silver*10) +
-                    copper +
-                    (electrum*50) +
-                    (platinum*1000);
-
-  let factor = 1;
-  [...cbArr].reverse().some((cb, i) => {
-    if (!cb.checked) {
-      factor = Math.pow(10, i+1);
-      return false;
-    }
-    return true;
-  });
-
-  let dividedCopper = Math.sign(totalCopper)*(Math.floor(Math.abs(totalCopper)/(party*factor))*factor);
-  let mvpCopper = dividedCopper + Math.sign(totalCopper)*(Math.abs(totalCopper)%(party*factor));
-
-  return [dividedCopper, mvpCopper];
-}
-
-function dungeonSplitter() {
-  let pileContents = [];
-  let bagContents = [];
-
-  currencyArr.forEach(currency => {
-    if (window[currency] != 0) {
-      let amount = window[currency];
-      let sh = currency[0]+"p";
-
-      // equal piles
-      if ((Math.floor(Math.abs(amount)/party)) != 0)
-      pileContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.floor(Math.abs(amount)/party))});
-      
-      // into the bag
-      if ((Math.abs(amount)%party) != 0)
-      bagContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.abs(amount)%party)});
-    }
-  });
-
-  return [pileContents, bagContents];
-}
-
 function createLabel(name, parentEl, type) {
   let label = document.createElement('div');
   label.innerHTML = (type != "cb") ? name[0].toUpperCase() + name.substring(1) : name.toUpperCase();
@@ -118,7 +74,51 @@ function createInput(inputName, parentEl, type) {
   parentEl.appendChild(inputHolder);
 }
 
-function formatResults(dividedCurs) {
+function splitTownCurrency() {
+  let totalCopper = (gold*100) +
+                    (silver*10) +
+                    copper +
+                    (electrum*50) +
+                    (platinum*1000);
+
+  let factor = 1;
+  [...cbArr].reverse().some((cb, i) => {
+    if (!cb.checked) {
+      factor = Math.pow(10, i+1);
+      return false;
+    }
+    return true;
+  });
+
+  let dividedCopper = Math.sign(totalCopper)*(Math.floor(Math.abs(totalCopper)/(party*factor))*factor);
+  let mvpCopper = dividedCopper + Math.sign(totalCopper)*(Math.abs(totalCopper)%(party*factor));
+
+  return [dividedCopper, mvpCopper];
+}
+
+function splitDungeonCurrency() {
+  let pileContents = [];
+  let bagContents = [];
+
+  currencyArr.forEach(currency => {
+    if (window[currency] != 0) {
+      let amount = window[currency];
+      let sh = currency[0]+"p";
+
+      // equal piles
+      if ((Math.floor(Math.abs(amount)/party)) != 0)
+      pileContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.floor(Math.abs(amount)/party))});
+      
+      // into the bag
+      if ((Math.abs(amount)%party) != 0)
+      bagContents.push({shorthand: sh, amount: Math.sign(amount)*(Math.abs(amount)%party)});
+    }
+  });
+
+  return [pileContents, bagContents];
+}
+
+function formatTownResults(dividedCurs) {
   function splitNumIntoArray(amount) {
     return String(Math.abs(amount)).split(/(\d*(?=\d{3}))?(\d?(?=\d{2}))?(\d?(?=\d{1}))?(\d?$)?/).filter(Boolean).map((num)=>{
       return Math.sign(amount)*Number(num);
@@ -174,9 +174,6 @@ function formatResults(dividedCurs) {
 }
 
 function formatDungeonResults(piles) {
-  let pileStr = "";
-  let bagStr = "";
-
   function getResultStr(pile) {
     let str = "";
     let coinCount = 0;
@@ -202,7 +199,6 @@ function formatDungeonResults(piles) {
             "<span class=\"amount\">"+getResultStr(piles[1])+"</span>"+
           "</div>":
           "");
-
 }
 
 function splitInTown() {
@@ -210,11 +206,11 @@ function splitInTown() {
     cbArr[i].checked = document.getElementById(cbArr[i].shorthand).checked;
   });
 
-  return formatResults(splitGold());
+  return formatTownResults(splitTownCurrency());
 }
 
 function splitInDungeon() {
-  return formatDungeonResults(dungeonSplitter());
+  return formatDungeonResults(splitDungeonCurrency());
 }
 
 /* -- major containers ------------------------------------------------ */
